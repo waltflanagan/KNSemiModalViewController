@@ -18,6 +18,7 @@ const struct KNSemiModalOptionKeys KNSemiModalOptionKeys = {
 	.shadowOpacity           = @"KNSemiModalOptionShadowOpacity",
 	.transitionStyle         = @"KNSemiModalTransitionStyle",
     .disableCancel           = @"KNSemiModalOptionDisableCancel",
+    .useScreenshot           = @"KNSemiModalOptionUseScreenshot",
 };
 
 #define kSemiModalViewController           @"PaPQC93kjgzUanz"
@@ -60,6 +61,7 @@ const struct KNSemiModalOptionKeys KNSemiModalOptionKeys = {
      KNSemiModalOptionKeys.shadowOpacity : @(0.8),
      KNSemiModalOptionKeys.transitionStyle : @(KNSemiModalTransitionStyleSlideUp),
      KNSemiModalOptionKeys.disableCancel : @(NO),
+     KNSemiModalOptionKeys.useScreenshot : @(YES),
 	 }];
 }
 
@@ -106,6 +108,12 @@ const struct KNSemiModalOptionKeys KNSemiModalOptionKeys = {
 }
 
 -(UIImageView*)kn_addOrUpdateParentScreenshotInView:(UIView*)screenshotContainer {
+    
+    if(![[self ym_optionOrDefaultForKey:KNSemiModalOptionKeys.useScreenshot] boolValue])
+    {
+        return nil;
+    }
+    
 	UIView *target = [self parentTarget];
 	UIView *semiView = [target viewWithTag:kSemiModalModalViewTag];
 	
@@ -199,7 +207,12 @@ const struct KNSemiModalOptionKeys KNSemiModalOptionKeys = {
         
         // Add semi overlay
         UIView * overlay = [[UIView alloc] initWithFrame:target.bounds];
-        overlay.backgroundColor = [UIColor blackColor];
+        
+        if([[self ym_optionOrDefaultForKey:KNSemiModalOptionKeys.useScreenshot] boolValue])
+        {
+            overlay.backgroundColor = [UIColor blackColor];
+        }
+
         overlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         overlay.tag = kSemiModalOverlayTag;
         
